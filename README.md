@@ -56,16 +56,18 @@ By engaging with this project, it was possible to align technical skills with re
 | Product Related Duration     | Total time spent on product-related pages in a session.                                                                                                                                                                                              |
 | Bounce Rate                  | Percentage of visitors who enter the site from a specific page and leave without<br>triggering any other requests to the analytics server during that session.                                                                                          |
 | Exit Rate                    | Percentage of pageviews where a specific page was the last one in the session.                                                                                                                                                                      |
-| Page Value                   | Average value for a web page that a user visited before <br> completing an e-commerce transaction.                                                                                                                                                        |
-| Special Day                  | Indicates the closeness of the site visiting time to a <br> specific special day (e.g., Mother’s Day, Valentine's Day). <br> Takes values between 0 and 1 based on proximity to the special day,<br>  with 1 being the closest.                                        |
+| Page Value                   | Average value for a web page that a user visited before completing an e-commerce transaction.                                                                                                                                                        |
+| Special Day                  | Indicates the closeness of the site visiting time to a specific special day (e.g., Mother’s Day, Valentine's Day). Takes values between 0 and 1 based on proximity to the special day,with 1 being the closest.                                        |
 | Operating System             | Operating system used by the visitor.                                                                                                                                                                                                                |
 | Browser                      | Browser used by the visitor.                                                                                                                                                                                                                        |
 | Region                       | Geographic region of the visitor.                                                                                                                                                                                                                   |
-| Traffic Type                 | Type of traffic source bringing the visitor to the site <br> (e.g., direct, referral).                                                                                                                                                                   |
+| Traffic Type                 | Type of traffic source bringing the visitor to the site (e.g., direct, referral).                                                                                                                                                                   |
 | Visitor Type                 | Indicates whether the visitor is a returning or new visitor.                                                                                                                                                                                         |
 | Weekend                      | Boolean value indicating whether the visit occurred on a weekend.                                                                                                                                                                                   |
 | Month                        | Month of the year when the visit occurred.                                                                                                                                                                                                          |
 
+
+  
 ## Research results
 
 ### **Impact of Analysis**
@@ -79,7 +81,7 @@ The analysis provides actionable insights for optimizing the e-commerce platform
 | **Operational efficiency**        | Cluster-based strategies optimize resources by prioritizing high-value segments and addressing the pain points of low-engagement users. |
 | **Data-driven decisions**         | Predictive modeling enables the identification of revenue-generating sessions, guiding business strategies with precision.|
 
-#### **Key insights**
+### **Key insights**
 
 1. **User engagement**:
    - Product-related pages dominate user engagement, indicating their critical role in driving purchases.
@@ -94,24 +96,53 @@ The analysis provides actionable insights for optimizing the e-commerce platform
   
 3. **Cluster analysis**:
    - Identified four clusters:
-     - **Low Engagement Users**: Minimal interaction, requiring targeted recommendations.
-     - **High Value-Oriented Users**: Engaged and revenue-contributing users who value personalized offers.
-     - **Time-Intensive Explorers**: High engagement but low conversion; need better navigation tools.
-     - **Focused Interactors**: Efficient engagement; can be encouraged to explore more.
+     - **Low Engagement Users** Cluster 1 (6%): This cluster represents users with minimal engagement and poor interaction with the app’s features. They likely need more targeted recommendations or smoother onboarding to improve their experience.
+     - **High Value-Oriented Users** Cluster 3 (7%): Engaged and revenue-contributing users who value personalized offers. Users in this cluster are highly engaged and value the content provided. Strategies to further enhance their experience could include personalized offers or advanced search/filtering features.
+     - **Time-Intensive Explorers** Cluster 2 (14%): High engagement but low conversion; need better navigation tools. This cluster consists of users who spend a significant amount of time exploring products but may not always focus on high-value pages. Consider optimizing product categorization or providing better navigation to help them find relevant content faster.
+     - **Focused Interactors** Cluster 0 (76%): Efficient engagement; can be encouraged to explore more. These users are focused and interact efficiently with products. Despite their lower engagement duration, they maintain high interaction quality. Encouraging further exploration by suggesting complementary products or related categories could increase their engagement.
   
+*Cluster Visualization Based on Engagement Metrics*  
+![image](https://github.com/user-attachments/assets/8c3aa975-37e6-487a-ad79-eaa3e42639aa)  
   
+*Cluster means for features*  
+![image](https://github.com/user-attachments/assets/f389bf46-21d9-4f71-8623-60a0f4155d2d)  
+
+
 4. **Correlation analysis**:
    - Strong correlations between page counts and durations (e.g., ProductRelated vs. ProductRelated_Duration).
-   - Moderate positive correlation between Revenue and PageValues (0.6), indicating high-value pages’ importance in conversions.
+   - Moderate positive correlation between Revenue and PageValues (0.5), indicating high-value pages’ importance in conversions.
    - Negative correlation between product engagement ratio and bounce/exit rates.
-  
+![image](https://github.com/user-attachments/assets/9d3706f2-1555-4c13-b071-087eef852867)  
+
   
 5. **Predictive modeling**:
    - **XGBoost** performed best with Average Precision=0.963. It effectively captures nearly all positive cases (with Recall = 0.966), ensuring that we do not miss potential buyers and can target them appropriately.
    - **Random Forest** provided balanced performance with high Recall (0.955) and Precision (0.895). Analysing feature importance the model might be overfitting, because the PageValues is the most dominant feature that affect on 0.3. 
    - **Logistic Regression** showed lower performance, highlighting the need for more complex models.
   
+For our target metrics, we prioritized:
+- Maximizing Accuracy and AUC to evaluate the overall ability of the model to make correct predictions.
+- Maximizing Recall to identify as many true sessions with revenue as possible.
+  
+Based on models with optimized parameters and thresholds, the following results were obtained:
+	
+| Metrics | Logistic Regression	| Random Forest	| XGBoost |
+|---------|-----------------------|-----------------|---------|
+|Accuracy|	0.880|	0.921	|0.895|
+|Precision	|0.883	|0.895	|0.846|
+|Recall	|0.875	|0.955	|0.966|
+|F1-score	|0.879	|0.924	|0.902|
+|Avg. Precision	|0.944	|0.974	|0.963|
 
+*Confusion Matrix for 3 models*
+![image](https://github.com/user-attachments/assets/c83a6169-850f-4c03-a6b1-a3322758024d)
+  
+*Precision-Recall Curves for 3 models*
+![image](https://github.com/user-attachments/assets/cd4d381a-bedd-4077-9de8-2e9dad80eabf)
+
+Given that **minimizing False Negatives (maximizing Recall** is essential for our use case, **XGBoost is the best choice**. It effectively captures nearly all positive cases (Recall = 0.966 and Average Precision=0.963), ensuring that we do not miss potential buyers and can target them appropriately.  
+The analysis highlights the significant impact of specific categorical features such as Region, TrafficType, Operating System, and Browser. These features contribute heavily to the model's ability to make accurate predictions.  
+To further improve performance and tailor predictions, it may be beneficial to build region-specific prediction models. This approach could provide deeper insights into the unique characteristics and behaviors within each region, ultimately enhancing our understanding and improving targeting accuracy.  
 
 
 
